@@ -1,33 +1,26 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import explorer from './data/explorerData';
+import Folder from './components/Folder';
+import './styles.css';
+import useTraverseTree from './hooks/useTraverseTree';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [explorerData, setExplorerData] = useState(explorer);
+
+  // console.log(explorerData);
+
+  const { insertNode } = useTraverseTree();
+
+  const handleInsertNode = (folderId: string, item: string, isFolder: boolean) => {
+    const finalTree = insertNode(explorerData, folderId, item, isFolder);
+
+    setExplorerData(finalTree);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Folder explorer={explorerData} handleInsertNode={handleInsertNode} />
     </>
   )
 }
